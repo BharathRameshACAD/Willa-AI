@@ -1,0 +1,9 @@
+// disclosure.compact
+// Skeleton Compact contract to accept/verify selective disclosure proofs (ZK proof metadata).
+//
+// Intended behavior:
+// - Verifier requests a predicate (e.g., age >= 18).
+// - User submits a client-generated ZK proof along with a disclosureID.
+// - Contract verifies proof metadata and records a disclosure event linking to a consent commitment.
+//
+// Replace with real Compact code and ZK verification primitives provided by Midnight.

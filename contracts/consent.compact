@@ -1,0 +1,16 @@
+// consent.compact
+// Skeleton Compact contract for recording a commitment hash and a consent event.
+//
+// Note: This is a placeholder showing the intended on-chain primitives.
+// Replace with real Compact syntax and Midnight toolchain when integrating.
+
+// contract Consent {
+//   // Records: commitmentHash, signerAddress, timestamp, optional disclosureRefs
+//   // Functions:
+//   //  commitConsent(commitmentHash, metadata) -> stores commitment and emits ConsentCommitted
+//   //  revokeConsent(commitmentHash) -> marks revoked
+//   //
+//   // Security: Only signer can commit their own consent; commitments are cryptographic hashes of off-chain document.
+// }
+//
+// Acceptance: The compact contract should NOT store PII. Only store hash and minimal metadata.

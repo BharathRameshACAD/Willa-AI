@@ -1,0 +1,9 @@
+{
+    "server_port": 3000,
+    "llama_bin": "./llama.cpp/main",
+    "model_path": "./models/your-model.bin",
+    "llama_args": [
+        "-n",
+        "256"
+    ]
+}

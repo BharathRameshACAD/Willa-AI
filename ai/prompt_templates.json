@@ -1,0 +1,4 @@
+{
+  "cape_town_will_simple": "Draft a testamentary will for a testator in Cape Town. Include sections: Introduction, Executor appointment, Beneficiaries, Distribution of estate, Guardianship for minors if applicable, Signatures. Keep language simple and clause-based. Replace any names or addresses with placeholder tokens like {BENEFICIARY_A} or {ASSET_1}.",
+  "generic_will": "Draft a clear, short will with headings: Intro, Appointment of executor, Gifts, Residue, Signatures. Use neutral phrasing."
+}
