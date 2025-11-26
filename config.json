@@ -1,9 +1,18 @@
 {
     "server_port": 3000,
+    "llm_mode": "api",
+    "api_url": "http://localhost:11434/api/generate",
+    "api_model": "qwen2.5:latest",
+    "api_options": {
+        "temperature": 0.7,
+        "num_predict": 512
+    },
     "llama_bin": "./llama.cpp/main",
-    "model_path": "./models/your-model.bin",
+    "model_path": "./models/qwen2.5-7b-instruct.gguf",
     "llama_args": [
         "-n",
-        "256"
+        "512",
+        "--temp",
+        "0.7"
     ]
 }

@@ -14,21 +14,68 @@ Not included
 
 Prerequisites
 - Node 18+ and npm
-- A built `llama.cpp` binary (for example `./llama.cpp/main`) and an offline model compatible with your build (e.g., GGML format).
-- Linux/macOS recommended for the example scripts. Windows users can adapt the commands.
+- **Option A (Recommended)**: Ollama with Qwen model installed
+- **Option B**: A built `llama.cpp` binary and a Qwen GGUF model file
+
+## Local LLM Setup
+
+> 📖 **See [QWEN_SETUP.md](./QWEN_SETUP.md) for detailed Qwen installation guide, hardware requirements, and performance tips.**
+
+### Option A: Using Ollama (Recommended - Easy Setup)
+
+1. Install Ollama from https://ollama.ai
+2. Pull the Qwen model:
+   ```bash
+   ollama pull qwen2.5:latest
+   ```
+3. Verify Ollama is running:
+   ```bash
+   ollama list
+   ```
+4. The server will automatically use Ollama API at `http://localhost:11434`
+
+### Option B: Using llama.cpp Binary
+
+1. Build or download llama.cpp binary
+2. Download a Qwen GGUF model (e.g., `qwen2.5-7b-instruct.gguf`)
+3. Edit `config.json`:
+   - Set `"llm_mode": "binary"`
+   - Point `llama_bin` to your llama.cpp binary
+   - Point `model_path` to your Qwen GGUF file
+
+## Configuration
+
+Edit `config.json` to configure your LLM backend:
+
+**For Ollama (API mode - default):**
+```json
+{
+  "llm_mode": "api",
+  "api_url": "http://localhost:11434/api/generate",
+  "api_model": "qwen2.5:latest"
+}
+```
+
+**For llama.cpp (binary mode):**
+```json
+{
+  "llm_mode": "binary",
+  "llama_bin": "./llama.cpp/main",
+  "model_path": "./models/qwen2.5-7b-instruct.gguf"
+}
+```
 
 Quick start
-1. Unzip the downloaded archive and cd into `willa_basic_repo`.
-2. Edit `config.json` to point `llama_bin` to your llama.cpp binary and `model_path` to your model file.
-3. Install dependencies:
-   ```
+1. Install dependencies:
+   ```bash
    npm install
    ```
-4. Run the demo server:
-   ```
+2. Set up your local LLM (see options above)
+3. Run the demo server:
+   ```bash
    npm start
    ```
-5. Open the demo UI in your browser:
+4. Open the demo UI in your browser:
    ```
    http://localhost:3000/ui/
    ```

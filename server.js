@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { exec } = require('child_process');
 const fs = require('fs');
+const fetch = require('node-fetch');
 
 const cfg = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
 const app = express();
@@ -10,22 +11,53 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/ui', express.static(__dirname + '/ui'));
 
-function callLocalLLM(prompt, cb) {
-  // Build basic command for llama.cpp main binary. Adjust args in config.json as needed.
-  const bin = cfg.llama_bin;
-  const model = cfg.model_path;
-  const extra = (cfg.llama_args || []).join(' ');
-  // WARNING: This simplistic escaping is for demo only. For production, use execFile with args array.
-  const cmd = `${bin} -m ${model} -p "${prompt.replace(/"/g, '\"')}" ${extra}`;
-  console.log('LLM CMD:', cmd);
-  exec(cmd, { maxBuffer: 1024 * 1024 * 10 }, (err, stdout, stderr) => {
-    if (err) {
-      console.error('LLM error', err, stderr);
-      return cb(err || new Error('LLM failed'));
+// Unified LLM interface supporting multiple backends
+async function callLocalLLM(prompt, cb) {
+  const mode = cfg.llm_mode || 'binary';
+  
+  if (mode === 'api') {
+    // API mode: Call Ollama or llama.cpp server
+    try {
+      console.log(`Calling LLM API: ${cfg.api_url} with model: ${cfg.api_model}`);
+      const response = await fetch(cfg.api_url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: cfg.api_model,
+          prompt: prompt,
+          stream: false,
+          options: cfg.api_options || {}
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API returned ${response.status}: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      const generation = data.response || data.content || '';
+      cb(null, generation);
+    } catch (err) {
+      console.error('LLM API error:', err);
+      cb(err);
     }
-    // Return stdout as the generated draft
-    cb(null, stdout || stderr || '');
-  });
+  } else {
+    // Binary mode: Call llama.cpp binary directly
+    const bin = cfg.llama_bin;
+    const model = cfg.model_path;
+    const extra = (cfg.llama_args || []).join(' ');
+    // WARNING: This simplistic escaping is for demo only. For production, use execFile with args array.
+    const cmd = `${bin} -m ${model} -p "${prompt.replace(/"/g, '\"')}" ${extra}`;
+    console.log('LLM CMD:', cmd);
+    exec(cmd, { maxBuffer: 1024 * 1024 * 10 }, (err, stdout, stderr) => {
+      if (err) {
+        console.error('LLM error', err, stderr);
+        return cb(err || new Error('LLM failed'));
+      }
+      // Return stdout as the generated draft
+      cb(null, stdout || stderr || '');
+    });
+  }
 }
 
 // Simple in-memory storage for the demo (NOT for production)
