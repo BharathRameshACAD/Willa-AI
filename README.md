@@ -3,6 +3,8 @@
 This repository is a minimal, runnable proof-of-concept scaffold for **Willa**:
 a privacy-first DApp demonstrating local LLM-assisted will drafting and Compact contract placeholders.
 
+![Willa UI Demo](./image.png)
+
 Purpose
 - Provide a simple local demo where a user drafts a will using a local LLM (via `llama.cpp`).
 - Show where Compact contracts (consent/disclosure) would fit into the flow.
